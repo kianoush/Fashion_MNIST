@@ -108,11 +108,28 @@ for epoch in range(num_epochs):
         # update parameters
         optim.step()
 
-        if (i+1) % 100==0:
+        if (i+1) % 100 == 0:
             print('Train, Epoch [%2d/%2d], Step [%3d/%3d], Loss: %.4f'
                   % (epoch + 1, num_epochs, i + 1, len(train_dl), loss.data.item()))
 
 
+"""
+Test data
+"""
+
+model.eval()
+corrects = 0
+for j, (inputs, targets) in enumerate(test_dl):
+
+    inputs = to_var(inputs)
+    targets = to_var(targets)
+    output = model(inputs)
+    predict = torch.argmax(output, 1)
+    corrects += torch.sum(predict==targets)
+
+print(
+ 100 * corrects/(len(test_dl))
+)
 
 
 print('End!')
