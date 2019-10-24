@@ -73,8 +73,8 @@ criterions = nn.CrossEntropyLoss()
 """
 Optim
 """
-optim = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-
+optim = optim.Adam(model.parameters(), lr=0.001)
+lr_sch = torch.optim.lr_scheduler.StepLR(optim, 1, gamma=0.5)
 
 """
 Main loop
@@ -127,9 +127,7 @@ for j, (inputs, targets) in enumerate(test_dl):
     predict = torch.argmax(output, 1)
     corrects += torch.sum(predict==targets)
 
-print(
- 100 * corrects/(len(test_dl))
-)
+print(100 * corrects.data.item()/(len(test_datasets)))
 
 
 print('End!')
